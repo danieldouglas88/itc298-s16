@@ -16,7 +16,7 @@ var del = function (para) {
         return books.length; }  } }
 
 var http = require("http"), fs = require('fs'), qs = require("querystring");
-//let book = require('book');
+let book = require('book');
 
 function serveStatic(res, path, contentType, responseCode){
   if(!responseCode) responseCode = 200;
