@@ -36,7 +36,7 @@ http.createServer((req,res) => {
 
   switch(path) {
     case '/': 
-      serveStatic(res, '/home.html', 'text/html');
+      serveStatic(res, '/public/home.html', 'text/html');
       break;
           
     case '/about':
