@@ -1,33 +1,63 @@
-var http = require('http');
-var fs = require('fs');
+'use strict'
 
-function serveStaticFile(res, path, contentType, responseCode) {
-    if(!responseCode) responseCode = 200;
-    fs.readFile(__dirname + path, function(err, data) {
-        if(err) {
-            res.writeHead(500, { 'contentType': 'text/plain'});
-            res.end('500 - Internal Error');
-        } else {
-            res.writeHead(responseCode, { 'Content-Type': contentType});
-            res.end(data); }
-        });  }
+var books = [
+    {title: "dune", author:"frank herbert", pubdate:1969},  {title: "it", author:"steven king", pubdate:1975}, {title: "moby dick", author:"herman melville", pubdate:1869}, ];
 
-http.createServer(function(req,res) {
-    var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
-    
-    switch(path) {
-        case '':
-            serveStaticFile(res, '/public/home.html', 'text/html');
-            break;
-        
-        case '/about':
-            res.end('This app is by Daniel Douglas; it was created on the 8th of April 2017, and it is a basic server communication program.');
-            break;
-            
-        default:
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end('Not Found');
-            break; }
-    }).listen(3000);
+var find = function (para) {
+for (var i in books) { 
+    if (books[i].title == para) {
+        return books[i]  }  } }
 
-console.log("Server has started on localhost:3000; CTRL-C ends current session");
+var del = function (para) {
+    for (var i in books) { 
+    if (books[i].title == para) {
+        var index = books.indexOf(i);
+        books.splice(index, 1);
+        return books.length; }  } }
+
+var http = require("http"), fs = require('fs'), qs = require("querystring");
+//let book = require('book');
+
+function serveStatic(res, path, contentType, responseCode){
+  if(!responseCode) responseCode = 200;
+  fs.readFile(__dirname + path, function(err, data){
+      if(err){
+        res.writeHead(500, {'Content-Type': 'text/plain'});
+        res.end('Internal Server Error');
+      }
+      else{
+        res.writeHead(responseCode, {'Content-Type': contentType});
+        res.end(data);  }});}
+
+http.createServer((req,res) => {
+  let url = req.url.split("?");  // seperate route from query string
+  let params = qs.parse(url[1]); // convert query string to object
+  let path = url[0].toLowerCase();
+
+  switch(path) {
+    case '/': 
+      serveStatic(res, '/home.html', 'text/html');
+      break;
+          
+    case '/about':
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('This is an about page. Please come back again soon for nothing.');
+      break;
+          
+    case '/get':
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+    let works = JSON.stringify(find(params.title));
+      res.end('Results for your movie title search for ' + params.title + ":\n " + works);
+        break;
+  
+    case '/delete':
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+          let delList = JSON.stringify(find(params.title));
+        let work = JSON.stringify(del(params.title));
+      res.end('Your selection, ' + delList + " has been deleted. The array count is now: " + work);
+        break;
+          
+    default:
+      res.writeHead(404, {'Content-Type': 'text/plain'});
+      res.end('404:Page not found.');
+  }}).listen(process.env.PORT || 3000);
