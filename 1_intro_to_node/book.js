@@ -5,13 +5,13 @@ var books = [
     {title: "it", author:"steven king", pubdate:1975},
     {title: "moby dick", author:"herman melville", pubdate:1869}, ];
 
-exports.find = function (para) {
+exports.get = function (para) {
     
-for (var i in books) { 
+    for (var i in books) { 
     
-    if (books[i].title == para) {
+        if (books[i].title == para) {
         
-        return books[i]  }  } }
+            return books[i]   }  } }
 
 
 exports.del = function (para) {
