@@ -1,22 +1,7 @@
 'use strict'
 
-var books = [
-    {title: "dune", author:"frank herbert", pubdate:1969},  {title: "it", author:"steven king", pubdate:1975}, {title: "moby dick", author:"herman melville", pubdate:1869}, ];
-
-var find = function (para) {
-for (var i in books) { 
-    if (books[i].title == para) {
-        return books[i]  }  } }
-
-var del = function (para) {
-    for (var i in books) { 
-    if (books[i].title == para) {
-        var index = books.indexOf(i);
-        books.splice(index, 1);
-        return books.length; }  } }
-
 var http = require("http"), fs = require('fs'), qs = require("querystring");
-let book = require('book');
+let book = require("./book");
 
 function serveStatic(res, path, contentType, responseCode){
   if(!responseCode) responseCode = 200;
@@ -46,15 +31,15 @@ http.createServer((req,res) => {
           
     case '/get':
       res.writeHead(200, {'Content-Type': 'text/plain'});
-    let works = JSON.stringify(find(params.title));
+    let works = JSON.stringify(book.get(params.title));
       res.end('Results for your movie title search for ' + params.title + ":\n " + works);
         break;
   
     case '/delete':
       res.writeHead(200, {'Content-Type': 'text/plain'});
-          let delList = JSON.stringify(find(params.title));
-        let work = JSON.stringify(del(params.title));
-      res.end('Your selection, ' + delList + " has been deleted. The array count is now: " + work);
+          
+        let work = JSON.stringify(book.del(params.title));
+      res.end('Your selection, ' + params.title + " has been deleted. The array count is now: " + work);
         break;
           
     default:
