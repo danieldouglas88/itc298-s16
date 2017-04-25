@@ -1,0 +1,19 @@
+
+<html>
+<body>
+    <head>  <link rel="stylesheet" href="style.css" />
+</head> <br> <br>
+  <h2>Deletion request for {{title}}:</h2> <hr>
+{{#if result}}
+    <h2>Your request, {{title}}, has been deleted from our list.</h2>
+    New Array Length: {{result}}
+    
+    <form action="/get?title={{title}}"><hr> <br> <br>
+ Seach for new Movie title: <br>
+  <input type="text" name="title" value="Enter here"> <br>
+        <input type="submit" value="Submit"> </form>
+  {{else}}
+    Not found.
+  {{/if}}
+</body>
+</html> 
