@@ -1,0 +1,31 @@
+
+<html>
+<body>
+        <head>  <link rel="stylesheet" href="style.css" />
+</head> <br><br>
+  <h2>Details for {{title}}:</h2><hr>
+  {{#if result}}
+    <li>Title: {{ result.title }}
+    <li>Author: {{ result.author }}
+    <li>Pubdate: {{ result.pubdate }}
+        <br><br>
+        
+<form action="/create?title={{title}}?author={{author}}?pubdate={{pubdate}}">
+ Add something to the array: <br><hr>
+    
+  Movie Title:<br> <input type="text" name="title" value="{{title}}"> <br>
+ Author: <br><input type="text" name="author" value="{{author}}"> <br>
+Published: <br><input type="text" name="pubdate" value="{{pubdate}}"> <br>
+<input type="submit" value="Create now"> </form>
+        
+        <form action="/get?title={{title}}">
+ Now search for your selection and its details within the array: <br>
+  <input type="text" name="title" value="{{title}}"> <br>
+            <input type="submit" value="Submit"> <br> <br> </form>
+        
+        <br> New array length: {{length}}
+  {{else}}
+    not found
+  {{/if}}
+</body>
+</html> 
