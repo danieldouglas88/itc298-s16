@@ -1,0 +1,10 @@
+<h2>Deletion request for {{title}}:</h2> <hr>
+{{#if result}}
+    <h2>Your request, {{title}}, has been deleted from our list.</h2>   
+    <form action="/get?title={{title}}"><hr> <br> <br>
+ Seach for new title: <br>
+  <input type="text" name="title" value="Enter here"> <br>
+        <input type="submit" value="Submit"> </form>
+  {{else}}
+    Not found.
+  {{/if}}
