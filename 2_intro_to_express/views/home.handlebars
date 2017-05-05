@@ -1,0 +1,20 @@
+<form action="/get?title={{title}}">
+ Book title search: <br>
+  <input type="text" name="title" value="Search "> <br>
+    <input type="submit" value="Submit">  </form> 
+<br><br> 
+
+<ul>
+    {{! each loop iterating through array with book objects}}
+    {{#each ret}}
+        <li> <a href="/get?title={{title}}">{{title}}</a></li>
+    {{/each}}
+</ul>
+<br><hr>
+<form action="/create?title={{title}}?author={{author}}?pubdate={{pubdate}}">
+ Add something to the array: <br><hr>
+    
+  Movie Title:<br> <input type="text" name="title" value="{{title}}"> <br>
+ Author: <br><input type="text" name="author" value="{{author}}"> <br>
+Published: <br><input type="text" name="pubdate" value="{{pubdate}}"> <br>
+<input type="submit" value="Create now"> </form>
