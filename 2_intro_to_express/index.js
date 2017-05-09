@@ -31,6 +31,12 @@ app.get('/get', function(req,res){
  res.render('details', {title: req.query.title, result: result, nav: '/', whichPG: "Home", whichPG2: "Details" });
 });
 
+// handle edit
+app.get('/edit', function(req,res){
+ let result = book.edit(req.query.title, req.query.author, req.query.pubdate);
+ res.render('edit', {title: req.query.title, result: result, nav: '/', whichPG: "Home", whichPG2: "Edit" });
+});
+
 // handle CREATE
 app.get('/create', function(req,res){
  let result = book.create(req.query.title, req.query.author, req.query.pubdate);
