@@ -1,5 +1,5 @@
 {
-  "name": "hwn4",
+  "name": "hwnassign",
   "version": "1.0.0",
   "description": "nodeJS server app with Express and Handlebars",
   "main": "index.js",
