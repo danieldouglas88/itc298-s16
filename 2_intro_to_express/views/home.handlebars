@@ -2,7 +2,6 @@
  Book title search: <br>
   <input type="text" name="title" value="Search "> <br>
     <input type="submit" value="Submit">  </form> 
-<br><br> 
 
 <ul>
     {{! each loop iterating through array with book objects}}
@@ -10,7 +9,7 @@
         <li> <a href="/get?title={{title}}">{{title}}</a></li>
     {{/each}}
 </ul>
-<br><hr>
+<hr>
 <form action="/create?title={{title}}?author={{author}}?pubdate={{pubdate}}">
  Add something to the array: <br><hr>
     
