@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-//var connectionString = PLEASE SEE /credentials.js SUBMITTED VIA CANVAS, FOR VALUE. 
+//var connectionString = PLEASE SEE CANVAS FOR VALUE. 
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } } };
 mongoose.connect(connectionString, options);
 
