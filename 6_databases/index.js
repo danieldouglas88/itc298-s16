@@ -1,5 +1,4 @@
 'use strict'
-var test = require('./test');
 var express = require("express");
 var app = express();
 var Book = require("./models/datamodel"); // use database model
