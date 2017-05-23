@@ -1,0 +1,26 @@
+  <h2>Details for {{title}}:</h2><hr>
+  {{#if result}}
+    <li>Title: {{ result.title }}
+    <li>Author: {{ result.author }}
+    <li>Pubdate: {{ result.pubdate }}
+        <br><br>
+        
+                    <form action="/delete?title={{title}}">
+ Delete this now: <br>
+  <input type="text" name="title" value="{{title}}"> <br>
+                <input type="submit" value="Delete"> </form>
+        
+        <br>
+        <form action="/create?title={{title}}?author={{author}}?pubdate={{pubdate}}">
+ <h2>Add your own object to array:</h2><hr>
+    
+ Title:<br> <input type="text" name="title" value="movie"> <br>
+ Author: <br><input type="text" name="author" value="{{author}}"> <br>
+Published: <br><input type="text" name="pubdate" value="{{pubdate}}"> <br>
+<input type="submit" value="Create now"> </form>
+        
+  {{else}}
+    not found
+  {{/if}}
+
+

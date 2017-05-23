@@ -1,36 +1,54 @@
-var express = require("express");
-var app = express();
+'use strict'
 
-// configure Express app
+let book = require("./lib/book.js");
+
+const express = require("express");
+const app = express();
+
 app.set('port', process.env.PORT || 3000);
-app.use(express.static('public'));
-app.use(require("body-parser").json()); 
-app.use(require("body-parser").urlencoded({extended: true}));
-app.use('/api', require('cors')());
+app.use(express.static(__dirname + '/views')); // allows direct navigation to static files
+app.use(require("body-parser").urlencoded({extended: true})); // parse form submissions
 
-// set template engine
-var handlebars = require('express-handlebars').create({defaultLayout: 'main', extname: '.hbs', 
-    helpers: {
-        shortDate: function (date) { 
-            if (typeof date == "string") { date = new Date(date); }
-            if (!date) { date = new Date(); }
-            var month = (date.getMonth() < 10) ? '0' + date.getMonth() : date.getMonth();
-            var day = (date.getDate() < 10) ? '0' + date.getDate() : date.getDate();
-            return date.getFullYear() + "-" + month + "-" + day; 
-        },
-    } 
-    });
-app.engine('hbs', handlebars.engine);
-app.set('view engine', 'hbs' );
+let handlebars =  require("express-handlebars")
+.create({ defaultLayout: "main"});
+app.engine("handlebars", handlebars.engine);
+app.set("view engine", "handlebars");
 
-var routes = require("./lib/routes")(app);
+// send static file as response
+app.get('/', function(req, res) { 
+  res.render('home', {ret: book.retFun(), nav: '/about', whichPG: "About", whichPG2: "Home"  } ); 
+});
 
+// handle GET
+app.get('/delete', function(req,res){
+    let result = book.del(req.query.title); // delete book object
+    res.render('delete', {title: req.query.title, result: result, nav: '/' , whichPG: "Home", whichPG2: "Delete" });
+});
+
+// handle POST
+app.get('/get', function(req,res){
+ let result = book.get(req.query.title);
+ res.render('details', {title: req.query.title, result: result, nav: '/', whichPG: "Home", whichPG2: "Details" });
+});
+
+// handle CREATE
+app.get('/create', function(req,res){
+ let result = book.create(req.query.title, req.query.author, req.query.pubdate);
+ res.render('create', {title: req.query.title, result: result, length: book.del(""), nav: '/', whichPG: "Home", whichPG2: "Create" });
+});
+
+// send about
+app.get('/about', function(req,res){
+ res.render('about', {nav: '/', whichPG: "Home", whichPG2: "About"});
+});
+
+// define 404 handler
 app.use(function(req,res) {
-    res.type('text/plain'); 
-    res.status(404);
-    res.send('404 - Not found');
+ res.type('text/plain');
+ res.status(404);
+ res.send('404 - Not found');
 });
 
 app.listen(app.get('port'), function() {
-    console.log('Express started');    
+ console.log('Express started');
 });
