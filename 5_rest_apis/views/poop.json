@@ -1,0 +1,14 @@
+{
+    "name": "mynodepackage",
+    "version": "0.0.1",
+    "eslintConfig": {
+        "plugins": ["example"],
+        "env": {
+            "example/custom": true
+        }
+    },    "rules": {
+        "eqeqeq": "off",
+        "curly": "error",
+        "quotes": ["error", "double"]
+    }
+}
