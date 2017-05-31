@@ -21,7 +21,6 @@ app.get('/', (req,res) => {
     })
 });
 
-
 app.get('/api/books', (req, res) => {
 	Book.getApi((err, books) => {
 		if(err){
@@ -29,6 +28,17 @@ app.get('/api/books', (req, res) => {
 		}
 		res.json(books);
 	});
+});
+
+app.get('/api/books/delete/:id', (req,res) => {
+    Book.remove({"title":req.params.id }, (err, result) => {
+        if (err) return (err);
+        
+        if (result.result.n)
+            res.send("Your selection, " + req.params.id +  ", has been deleted, mate.");        
+        if (!result.result.n)
+            res.send("Your selection, " + req.params.id +  ", appears to not be in our database, mate.");
+    });
 });
 
 app.get('/api/books/:_id', (req, res) => {
@@ -40,24 +50,11 @@ app.get('/api/books/:_id', (req, res) => {
 	});
 });
 
-app.delete('/api/books/:_id', (req, res) => {
-	var id = req.params._id;
-	Book.removeBook(id, (err, book) => {
-		if(err){
-			throw err;
-		}
-		res.json(book);
-	});
-});
-
-app.post('/api/books', (req, res) => {
-	var book = req.body;
-	Book.addBook(book, (err, book) => {
-		if(err){
-			throw err;
-		}
-		res.json(book);
-	});
+app.get('/api/books/create/:title/:author/:pubdate', (req,res) => {
+    Book.update({ title: req.params.title}, {title:req.params.title, author: req.params.author, pubdate: req.params.pubdate }, {upsert: true }, (err, result) => {
+        if (err) return(err);
+        res.send("Your selection, " + req.params.title +  ", has been either created or updated, mate.");
+    });
 });
 
 app.get('/about', (req,res) => {
@@ -80,7 +77,6 @@ app.get('/create', (req,res) => {
         res.render('create', {title: req.query.title, author: req.query.author, nav: '/', whichPG: "Home", whichPG2: "Create"} ); 
         });
 });
-
 
 app.get('/delete', (req,res) => {
     Book.remove({ title:req.query.title }, (err, result) => {
