@@ -19,14 +19,3 @@ module.exports.getApi = (callback, limit) => {
 module.exports.getBookById = (id, callback) => {
 	apiVar.findById(id, callback);
 }
-
-module.exports.addBook = (book, callback) => {
-	apiVar.create(book);
-}
-
-module.exports.removeBook = (id, callback) => {
-	var query = {_id: id};
-	apiVar.remove(query, callback);
-}
-
-
