@@ -1,0 +1,23 @@
+  <h2>Details for {{books.title}}:</h2><hr>
+    {{#each books}}
+    {{#if title}}
+        <li> '{{title}}' by {{author}}.</li>  <p>Publication date: {{pubdate}}</p>
+    {{/if}}
+  {{else}}
+    not found
+
+    {{/each}}
+
+        <br><br>
+        
+<form action="/delete?title={{books.title}}">
+ Delete this now: <br>
+  <input type="text" name="title" value="{{books.title}}"> <br>
+                <input type="submit" value="Delete"> </form>
+        
+        
+        
+         
+
+
+        
