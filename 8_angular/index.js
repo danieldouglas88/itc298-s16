@@ -1,23 +1,29 @@
 'use strict'
-var express = require("express");
-var app = express();
-var Book = require("./models/datamodel"); // use database model
+
+let express = require("express");
+let bodyParser = require("body-parser");
+let Book = require("./models/datamodel"); // use database model
+
+let app = express();
 
 // configure Express app
 app.set('port', process.env.PORT || 3000);
-app.use(express.static(__dirname + './views'));
-app.use(require("body-parser").urlencoded({extended: true}));
-
+app.use(express.static(__dirname + '/../public'));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+  console.log(err);
+});
 
 // set template engine
 let handlebars =  require("express-handlebars");
-app.engine("handlebars", handlebars({extname: 'handlebars', defaultLayout: 'main' }));
-app.set("view engine", "handlebars");
+app.engine(".html", handlebars({extname: '.html', defaultLayout: 'main' }));
+app.set("view engine", ".html");
 
 app.get('/', (req,res) => {
     Book.find((err,books) => {
         if (err) return next(err);
-        res.render('home', {books: books, nav: '/about', whichPG: "About", whichPG2: "Home" }); 
+        res.render('../home', {books: JSON.stringify(books), whichPG2: "Home", whichPG: "About", nav:'/about'}); 
     })
 });
 
@@ -31,13 +37,10 @@ app.get('/api/books', (req, res) => {
 });
 
 app.get('/api/books/delete/:id', (req,res) => {
-    Book.remove({"title":req.params.id }, (err, result) => {
-        if (err) return (err);
-        
-        if (result.result.n)
-            res.send("Your selection, " + req.params.id +  ", has been deleted, mate.");        
-        if (!result.result.n)
-            res.send("Your selection, " + req.params.id +  ", appears to not be in our database, mate.");
+    Book.remove({"_id":req.params.id }, (err, result) => {
+        if (err) return next(err);
+        // return # of items deleted
+        res.json({"deleted": result.result.n});
     });
 });
 
@@ -50,11 +53,20 @@ app.get('/api/books/:_id', (req, res) => {
 	});
 });
 
-app.get('/api/books/create/:title/:author/:pubdate', (req,res) => {
-    Book.update({ title: req.params.title}, {title:req.params.title, author: req.params.author, pubdate: req.params.pubdate }, {upsert: true }, (err, result) => {
-        if (err) return(err);
-        res.send("Your selection, " + req.params.title +  ", has been either created or updated, mate.");
-    });
+app.post('/api/books/create/', (req,res, next) => {
+  if (!req.body._id) { // insert new document
+        let book = new Book({title:req.body.title,author:req.body.author,pubdate:req.body.pubdate});
+        book.save((err,newBook) => {
+            if (err) return next(err);
+            console.log(newBook)
+            res.json({updated: 0, _id: newBook._id});
+        });
+    } else { // update existing document
+        Book.updateOne({ _id: req.body._id}, {title:req.body.title, author: req.body.author, pubdate: req.body.pubdate }, (err, result) => {
+            if (err) return next(err);
+            res.json({updated: result.nModified, _id: req.body._id});
+        });
+    }
 });
 
 app.get('/about', (req,res) => {
