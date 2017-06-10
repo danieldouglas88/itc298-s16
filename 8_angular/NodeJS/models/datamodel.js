@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
-var connectionString = 'mongodb://ddouglas88:Qazxsw!123@ds137101.mlab.com:37101/mongonode123';
+//var connectionString = PLEASE SEE CANVAS FOR VALUE. 
+
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } } };
 mongoose.connect(connectionString, options);
 
